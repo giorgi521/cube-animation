@@ -1,6 +1,13 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'  
-// import gsap from 'gsap'
+import * as dat from 'dat.gui'
+import gsap from 'gsap'
+
+const gui = new dat.GUI();
+
+// Textures
+const textureLoader = new THREE.TextureLoader()
+const texture = textureLoader.load('/door.jpg')
 
 const canvas =  document.querySelector('canvas.webgl')
 
@@ -47,29 +54,50 @@ scene.add(group)
 // group.add(triangle)
 
 
-const geometry = new THREE.BufferGeometry()
+// const geometry = new THREE.BufferGeometry()
 
-const count = 500 
-const positionArray = new Float32Array(count * 3 * 3)
+// const count = 500 
+// const positionArray = new Float32Array(count * 3 * 3)
 
-for(let i = 0; i < count * 3 * 3; i++){
-    positionArray[i] = (Math.random() - 0.5) * 4
-}
+// for(let i = 0; i < count * 3 * 3; i++){
+//     positionArray[i] = (Math.random() - 0.5) * 4
+// }
 
-const  positionAttribute = new THREE.BufferAttribute(positionArray, 3)
-geometry.setAttribute('position', positionAttribute)
+// const  positionAttribute = new THREE.BufferAttribute(positionArray, 3)
+// geometry.setAttribute('position', positionAttribute)
 
-const material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true})
+// const material = new THREE.MeshBasicMaterial({ map:texture})
 
-const mesh = new THREE.Mesh(geometry, material)
-group.add(mesh)
+// const mesh = new THREE.Mesh(geometry, material)
+// group.add(mesh)
 
-// const  cube1 = new THREE.Mesh(
-//     new THREE.BoxGeometry(1, 1, 1, 2 , 2 , 2 ),
-//     new THREE.MeshBasicMaterial({ color: 0xff0000 , wireframe: true})
-// )
 
-// group.add(cube1)
+//debug
+// gui.add(mesh.position, 'y', -3 , 3, 0.01)
+// gui.add(mesh.position, 'x', -3 , 3, 0.01)
+// gui.add(mesh.position, 'z', -3 , 3, 0.01)
+
+// const parameter = {
+//     color: 0xff0000,
+//     spin: () => {
+//         gsap.to(mesh.rotation, { y: mesh.rotation.y + 10, duration: 1})
+//     }
+// }
+// gui.addColor(parameter, 'color').onChange(() => {
+//     mesh.material.color.set(parameter.color)
+// })
+
+// gui.add(parameter, 'spin').onChange(() => {
+//     parameter.spin()
+// })
+
+
+const  cube1 = new THREE.Mesh(
+    new THREE.BoxGeometry(1, 1, 1, 2 , 2 , 2 ),
+    new THREE.MeshBasicMaterial({ map:texture})
+)
+
+group.add(cube1)
 
 
 // Sizes
