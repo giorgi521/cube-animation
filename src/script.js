@@ -23,12 +23,13 @@ const loadingManager = new THREE.LoadingManager()
 const TextureLoader = new THREE.TextureLoader(loadingManager)
 
 const colorTexture = TextureLoader.load('/door/color.jpg')
-const alphaTexture = TextureLoader.load('/door/alpha.jpg')
+const alphaTexture = TextureLoader.load('/door/alpha.jpg') 
 const heightTexture = TextureLoader.load('/door/height.jpg')
 const normalTexture = TextureLoader.load('/door/normal.jpg')
 const ambientOcclusionTexture = TextureLoader.load('/door/ambientOcclusion.jpg')
 const metalnessTexture = TextureLoader.load('/door/metalness.jpg')
 const roughnessTexture = TextureLoader.load('/door/roughness.jpg')
+const matcapTexture = TextureLoader.load('/matcaps/1.png')
 
 const scene = new THREE.Scene()
 
@@ -67,7 +68,10 @@ const position = {
 const group = new THREE.Group()
 scene.add(group)
 
-const material = new THREE.MeshBasicMaterial({ map:colorTexture})
+const material = new THREE.MeshBasicMaterial({ 
+    map:colorTexture,
+    side: THREE.DoubleSide
+})
 
 const sphere = new THREE.Mesh(
     new THREE.SphereGeometry(0.5 , 16, 16),
