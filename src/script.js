@@ -6,8 +6,41 @@ import gsap from 'gsap'
 const gui = new dat.GUI();
 
 // Textures
-const textureLoader = new THREE.TextureLoader()
-const texture = textureLoader.load('/door.jpg')
+const loadingManager = new THREE.LoadingManager()
+
+// loadingManager.onStart = () => {
+//     console.log('onStart')
+// }
+
+// loadingManager.onProgress = () => {
+//     console.log('onProgress')
+// }
+
+// loadingManager.onError = () => {
+//     console.log('onError')
+// }
+
+const TextureLoader = new THREE.TextureLoader(loadingManager)
+
+const colorTexture = TextureLoader.load('/door/color.jpg')
+const alphaTexture = TextureLoader.load('/door/alpha.jpg')
+const heightTexture = TextureLoader.load('/door/height.jpg')
+const normalTexture = TextureLoader.load('/door/normal.jpg')
+const ambientOcclusionTexture = TextureLoader.load('/door/ambientOcclusion.jpg')
+const metalnessTexture = TextureLoader.load('/door/metalness.jpg')
+const roughnessTexture = TextureLoader.load('/door/roughness.jpg')
+
+const scene = new THREE.Scene()
+
+
+colorTexture.repeat.x = 2
+colorTexture.repeat.y = 3
+colorTexture.wrapS = THREE.RepeatWrapping
+colorTexture.wrapT = THREE.RepeatWrapping
+
+colorTexture.magFilter = THREE.NearestFilter
+
+colorTexture.rotation = Math.PI * 0.25
 
 const canvas =  document.querySelector('canvas.webgl')
 
@@ -22,11 +55,42 @@ const cursor = {
 // })
 
 // Scene
-const scene = new THREE.Scene()
+
+//position
+
+const position = {
+    sphere: -1.5,
+    torus: 1.5
+}
 
 // Object
 const group = new THREE.Group()
 scene.add(group)
+
+const material = new THREE.MeshBasicMaterial({ map:colorTexture})
+
+const sphere = new THREE.Mesh(
+    new THREE.SphereGeometry(0.5 , 16, 16),
+    material
+)
+
+sphere.position.x = position.sphere
+
+const plane = new THREE.Mesh(
+    new THREE.PlaneGeometry(1, 1, 1, 1),
+    material
+)
+
+const torus = new THREE.Mesh(
+    
+    new THREE.TorusGeometry(0.3, 0.2, 16, 32),
+    material
+
+)
+
+torus.position.x = position.torus
+
+group.add(plane,sphere,torus)
 
 
 // axes helper
@@ -92,12 +156,14 @@ scene.add(group)
 // })
 
 
-const  cube1 = new THREE.Mesh(
-    new THREE.BoxGeometry(1, 1, 1, 2 , 2 , 2 ),
-    new THREE.MeshBasicMaterial({ map:texture})
-)
+// const  cube1 = new THREE.Mesh(
+//     new THREE.BoxGeometry(1, 1, 1, 2 , 2 , 2 ),
+//     // new THREE.SphereBufferGeometry(1, 32, 32),
+//     // new THREE.TorusBufferGeometry(1, 0.35, 32, 64),
+//     new THREE.MeshBasicMaterial({ map:colorTexture})
+// )
 
-group.add(cube1)
+// group.add(cube1)
 
 
 // Sizes
@@ -163,6 +229,7 @@ const tick = () => {
 
     const elapsedTime = time.getElapsedTime()
 
+    group.rotation.y = elapsedTime * 0.7
     // camera.position.x = Math.sin(cursor.x * Math.PI * 2 ) * 3
     // camera.position.z = Math.cos(cursor.x  * Math.PI * 2) * 3
     // camera.position.y = cursor.y * 5
